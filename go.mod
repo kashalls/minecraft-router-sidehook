@@ -6,6 +6,7 @@ require (
 	github.com/bwmarrin/discordgo v0.28.1
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/go-chi/chi v1.5.5
+	github.com/go-chi/chi/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/prometheus/client_golang v1.22.0
 	go.uber.org/zap v1.27.0
