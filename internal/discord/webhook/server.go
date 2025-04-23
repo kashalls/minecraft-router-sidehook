@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/kashalls/minecraft-router-sidehook/cmd/discord/configuration"
 	"github.com/kashalls/minecraft-router-sidehook/internal/constants"
 	"github.com/kashalls/minecraft-router-sidehook/internal/log"

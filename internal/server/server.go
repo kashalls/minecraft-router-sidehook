@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/kashalls/minecraft-router-sidehook/internal/log"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
