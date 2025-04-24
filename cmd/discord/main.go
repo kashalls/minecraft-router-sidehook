@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/kashalls/minecraft-router-sidehook/cmd/discord/configuration"
-	"github.com/kashalls/minecraft-router-sidehook/internal/discord/webhook"
+	"github.com/kashalls/minecraft-router-sidehook/internal/discord"
+	"github.com/kashalls/minecraft-router-sidehook/internal/log"
 	"github.com/kashalls/minecraft-router-sidehook/internal/server"
 )
 
@@ -21,17 +21,16 @@ var (
 
 func main() {
 	fmt.Printf(banner, Version, Gitsha)
+	log.Init()
 
-	config := configuration.Init()
-
-	if config.Webhook != "" {
-		main, health := server.Start(webhook.InitServer())
-		server.ShutdownGracefully(main, health)
+	config := discord.InitConfig()
+	if config.Webhook == "" {
+		fmt.Println("No webhook URL provided. Exiting.")
+		return
 	}
 
-	if config.Token != "" {
-		// Todo: Implement Discord bot functionality
-	}
+	main, health := server.Start(discord.InitServer(config))
+	server.ShutdownGracefully(main, health)
 
 	fmt.Println("Neither a webhook URL nor a bot token was provided. Exiting.")
 }

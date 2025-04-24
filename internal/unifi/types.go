@@ -1,0 +1,23 @@
+package unifi
+
+type UnifiNetworkObject struct {
+	Meta struct {
+		RC string `json:"rc"`
+	} `json:"meta"`
+	Data []NetworkGroup `json:"data"`
+}
+
+type NetworkGroup struct {
+	GroupMembers []string `json:"group_members"`
+	Name         string   `json:"name"`
+	SiteID       string   `json:"site_id"`
+	ID           string   `json:"_id"`
+	GroupType    string   `json:"group_type"`
+}
+
+type NewFirewallGroup struct {
+	Name         string   `json:"name"`
+	GroupMembers []string `json:"group_members"`
+	// address-group or ipv6-address-group
+	GroupType    string   `json:"group_type"`
+}

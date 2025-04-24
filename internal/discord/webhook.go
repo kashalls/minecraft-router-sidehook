@@ -1,4 +1,4 @@
-package webhook
+package discord
 
 import (
 	"bytes"
@@ -8,7 +8,6 @@ import (
 	"text/template"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kashalls/minecraft-router-sidehook/cmd/discord/configuration"
 	"github.com/kashalls/minecraft-router-sidehook/internal/constants"
 )
 
@@ -17,13 +16,12 @@ var DefaultTemplate = `{
 	"content": "New Event: {{.Status}}"
 }`
 
-func BuildMessage(data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
-	tmplStr := configuration.Config.WebhookTemplate
-	if tmplStr == "" {
-		tmplStr = DefaultTemplate
+func BuildMessage(cfgTmpl string, data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
+	if cfgTmpl == "" {
+		cfgTmpl = DefaultTemplate
 	}
 
-	tmpl, err := template.New("webhook").Parse(tmplStr)
+	tmpl, err := template.New("webhook").Parse(cfgTmpl)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse template: %w", err)
 	}
