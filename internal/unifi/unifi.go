@@ -189,11 +189,25 @@ func (c *httpClient) setHeaders(req *http.Request) {
 	req.Header.Add("Content-Type", "application/json; charset=utf-8")
 }
 
-func (c *httpClient) CreateNetworkObject(name string) error {
+var (
+	IPv4GroupType = "address-group"
+	IPv6GroupType = "ipv6-address-group"
+)
+
+func (c *httpClient) CreateNetworkObject(object NetworkGroup) error {
+	if object.GroupType != IPv4GroupType && object.GroupType != IPv6GroupType {
+		return fmt.Errorf("invalid group type: %s", object.GroupType)
+	}
+	jsonStringify, err := json.Marshal(object)
+	if err != nil {
+		log.Error("failed to marshal group members", zap.Error(err))
+		return err
+	}
+
 	resp, err := c.doRequest(
 		http.MethodPost,
 		FormatUrl(c.ClientURLs.NetworkObject, c.Config.Host, c.Config.Site),
-		bytes.NewBuffer([]byte(fmt.Sprintf(`{"name":"%s","group_type":"address-group","group_members":[]}`, name))),
+		bytes.NewBuffer(jsonStringify),
 	)
 	if err != nil {
 		log.Error("failed to create network object", zap.Error(err))
@@ -205,7 +219,7 @@ func (c *httpClient) CreateNetworkObject(name string) error {
 		log.Error("failed to create network object", zap.String("status", resp.Status), zap.String("response", string(body)))
 		return fmt.Errorf("failed to create network object: %s", resp.Status)
 	}
-	log.Info("created network object", zap.String("name", name))
+	log.Info("created network object", zap.Any("object", object))
 	return nil
 }
 
