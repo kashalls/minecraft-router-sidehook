@@ -12,7 +12,7 @@ import (
 
 func InitServer(config DiscordConfig) *chi.Mux {
 	router := chi.NewRouter()
-	router.Get("/webhook", func(w http.ResponseWriter, r *http.Request) {
+	router.Post("/webhook", func(w http.ResponseWriter, r *http.Request) {
 		var payload constants.WebhookNotifierPayload
 		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
