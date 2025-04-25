@@ -12,8 +12,38 @@ import (
 )
 
 var DefaultTemplate = `{
-	"username": "{{.Event}}",
-	"content": "New Event: {{.Status}}"
+  "embeds": [
+	{
+	  "author": {
+		"name": "{{.Client.Host}}"
+	  },
+	  "fields": [
+		{
+		  "name": "Event",
+		  "value": "{{ .Event }}",
+		  "inline": true
+		},
+		{
+		  "name": "Status",
+		  "value": "{{ .Status }}",
+		  "inline": true
+		},
+		{
+		  "name": "PlayerInfo",
+		  "value": "{{ .PlayerInfo.Name }} - {{ .PlayerInfo.Uuid }}"
+		},
+		{
+		  "name": "Backend",
+		  "value": "{{ .BackendHostPort }}"
+		},
+		{
+		  "name": "Error",
+		  "value": "{{ .Error }}"
+		}
+	  ],
+	  "color": 16720497
+	}
+  ]
 }`
 
 func BuildMessage(cfgTmpl string, data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
