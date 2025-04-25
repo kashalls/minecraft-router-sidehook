@@ -6,6 +6,7 @@ import (
 	"github.com/kashalls/minecraft-router-sidehook/internal/log"
 	"github.com/kashalls/minecraft-router-sidehook/internal/server"
 	"github.com/kashalls/minecraft-router-sidehook/internal/unifi"
+	"go.uber.org/zap"
 )
 
 const banner = `
@@ -50,9 +51,9 @@ func main() {
 				GroupMembers: []string{config.IPv4DefaultObjectValue},
 			}
 			if err := client.CreateNetworkObject(object); err != nil {
-				fmt.Printf("Error creating IPv4 object '%s': %v\n", config.IPv4ObjectName, err)
+				log.Error("Error creating IPv4 object", zap.String("objectName", config.IPv4ObjectName), zap.Error(err))
 			} else {
-				fmt.Printf("IPv4 object '%s' created successfully\n", config.IPv4ObjectName)
+				log.Info("IPv4 object created successfully", zap.String("objectName", config.IPv4ObjectName))
 			}
 		}
 
@@ -69,9 +70,9 @@ func main() {
 				GroupMembers: []string{config.IPv6DefaultObjectValue},
 			}
 			if err := client.CreateNetworkObject(object); err != nil {
-				fmt.Printf("Error creating IPv6 object '%s': %v\n", config.IPv6ObjectName, err)
+				log.Error("Error creating IPv6 object", zap.String("objectName", config.IPv6ObjectName), zap.Error(err))
 			} else {
-				fmt.Printf("IPv6 object '%s' created successfully\n", config.IPv6ObjectName)
+				log.Info("IPv6 object created successfully", zap.String("objectName", config.IPv6ObjectName))
 			}
 		}
 	}
