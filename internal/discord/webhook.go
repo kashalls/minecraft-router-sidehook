@@ -46,9 +46,53 @@ var DefaultTemplate = `{
   ]
 }`
 
+func DefaultTemplateBuilder(data constants.WebhookNotifierPayload) string {
+	embed := &discordgo.MessageEmbed{
+		Fields: []*discordgo.MessageEmbedField{
+			{
+				Name:   "Event",
+				Value:  data.Event,
+				Inline: true,
+			},
+			{
+				Name:   "Status",
+				Value:  data.Status,
+				Inline: true,
+			},
+		},
+	}
+	if data.PlayerInfo != nil {
+		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+			Name:   "Player Info",
+			Value:  fmt.Sprintf("%s - %s", data.PlayerInfo.Name, data.PlayerInfo.Uuid),
+			Inline: true,
+		})
+	}
+	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+		Name:   "Backend",
+		Value:  data.BackendHostPort,
+		Inline: true,
+	})
+	if data.Error != "" {
+		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
+			Name:   "Error",
+			Value:  data.Error,
+			Inline: true,
+		})
+	}
+
+	jsonBytes, err := json.Marshal(embed)
+	if err != nil {
+		fmt.Println("Error marshalling embed:", err)
+		return ""
+	}
+
+	return string(jsonBytes)
+}
+
 func BuildMessage(cfgTmpl string, data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
 	if cfgTmpl == "" {
-		cfgTmpl = DefaultTemplate
+		cfgTmpl = DefaultTemplateBuilder(data)
 	}
 
 	tmpl, err := template.New("webhook").Parse(cfgTmpl)
