@@ -12,87 +12,47 @@ import (
 )
 
 var DefaultTemplate = `{
-  "embeds": [
-	{
-	  "author": {
-		"name": "{{.Client.Host}}"
-	  },
-	  "fields": [
+	"embeds": [
 		{
-		  "name": "Event",
-		  "value": "{{ .Event }}",
-		  "inline": true
-		},
-		{
-		  "name": "Status",
-		  "value": "{{ .Status }}",
-		  "inline": true
-		},
-		{
-		  "name": "PlayerInfo",
-		  "value": "{{ .PlayerInfo.Name }} - {{ .PlayerInfo.Uuid }}"
-		},
-		{
-		  "name": "Backend",
-		  "value": "{{ .BackendHostPort }}"
-		},
-		{
-		  "name": "Error",
-		  "value": "{{ .Error }}"
+			"author": {
+				"name": "{{.Client.Host}}"
+			},
+			"color": 16720497
+			"fields": [
+				{
+					"name": "Event",
+					"value": "{{ .Event }}",
+					"inline": true
+				},
+				{
+					"name": "Status",
+					"value": "{{ .Status }}",
+					"inline": true
+				},
+				{{ if .PlayerInfo }}
+				{
+					"name": "PlayerInfo",
+					"value": "{{ .PlayerInfo.Name }} - {{ .PlayerInfo.Uuid }}"
+				},
+				{{ end }}
+				{
+					"name": "Backend",
+					"value": "{{ .BackendHostPort }}"
+				},
+				{{ if .Error }}
+				{
+					"name": "Error",
+					"value": "{{ .Error }}"
+				}
+				{{ end }}
+			],
 		}
-	  ],
-	  "color": 16720497
-	}
-  ]
+	]
 }`
-
-func DefaultTemplateBuilder(data constants.WebhookNotifierPayload) string {
-	embed := &discordgo.MessageEmbed{
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:   "Event",
-				Value:  data.Event,
-				Inline: true,
-			},
-			{
-				Name:   "Status",
-				Value:  data.Status,
-				Inline: true,
-			},
-		},
-	}
-	if data.PlayerInfo != nil {
-		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   "Player Info",
-			Value:  fmt.Sprintf("%s - %s", data.PlayerInfo.Name, data.PlayerInfo.Uuid),
-			Inline: true,
-		})
-	}
-	embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-		Name:   "Backend",
-		Value:  data.BackendHostPort,
-		Inline: true,
-	})
-	if data.Error != "" {
-		embed.Fields = append(embed.Fields, &discordgo.MessageEmbedField{
-			Name:   "Error",
-			Value:  data.Error,
-			Inline: true,
-		})
-	}
-
-	jsonBytes, err := json.Marshal(embed)
-	if err != nil {
-		fmt.Println("Error marshalling embed:", err)
-		return ""
-	}
-
-	return string(jsonBytes)
-}
 
 func BuildMessage(cfgTmpl string, data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
 	if cfgTmpl == "" {
-		cfgTmpl = DefaultTemplateBuilder(data)
+		cfgTmpl = DefaultTemplate
 	}
 
 	tmpl, err := template.New("webhook").Parse(cfgTmpl)
