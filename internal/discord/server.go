@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/kashalls/minecraft-router-sidehook/internal/constants"
+	"github.com/itzg/mc-router/server"
 	"github.com/kashalls/minecraft-router-sidehook/internal/log"
 	"go.uber.org/zap"
 )
@@ -13,7 +13,7 @@ import (
 func InitServer(config DiscordConfig) *chi.Mux {
 	router := chi.NewRouter()
 	router.Post("/webhook", func(w http.ResponseWriter, r *http.Request) {
-		var payload constants.WebhookNotifierPayload
+		var payload server.WebhookNotifierPayload
 		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 			http.Error(w, "Invalid JSON", http.StatusBadRequest)
 			return

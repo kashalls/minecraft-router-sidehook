@@ -8,7 +8,7 @@ import (
 	"text/template"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/kashalls/minecraft-router-sidehook/internal/constants"
+	"github.com/itzg/mc-router/server"
 )
 
 var DefaultTemplate = `{
@@ -50,7 +50,7 @@ var DefaultTemplate = `{
 	]
 }`
 
-func BuildMessage(cfgTmpl string, data constants.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
+func BuildMessage(cfgTmpl string, data server.WebhookNotifierPayload) (*discordgo.WebhookParams, error) {
 	if cfgTmpl == "" {
 		cfgTmpl = DefaultTemplate
 	}
