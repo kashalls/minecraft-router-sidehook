@@ -24,7 +24,7 @@ func main() {
 	log.Init()
 
 	config := discord.InitConfig()
-	if config.Webhook == "" {
+	if config.WebhookURL == "" {
 		fmt.Println("No webhook URL provided. Exiting.")
 		return
 	}

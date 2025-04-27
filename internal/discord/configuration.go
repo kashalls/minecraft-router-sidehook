@@ -7,8 +7,9 @@ import (
 )
 
 type DiscordConfig struct {
-	Webhook         string `env:"WEBHOOK" envDefault:""`
-	WebhookTemplate string `env:"WEBHOOK_TEMPLATE" envDefault:""`
+	WebhookURL           string `env:"WEBHOOK_URL" envDefault:""`
+	WebhookURLIsTemplate bool   `env:"WEBHOOK_URL_IS_TEMPLATE" envDefault:"false"`
+	DiscordTemplate      string `env:"DISCORD_TEMPLATE" envDefault:""`
 }
 
 func InitConfig() DiscordConfig {

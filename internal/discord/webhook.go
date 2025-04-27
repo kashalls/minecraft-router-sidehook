@@ -19,6 +19,17 @@ var DefaultTemplate = `{
 			},
 			"color": 16720497,
 			"fields": [
+				{{ if .PlayerInfo }}
+				{
+					"name": "PlayerInfo",
+					"value": "{{ .PlayerInfo.Name }} - {{ .PlayerInfo.Uuid }}"
+				},
+				{{ end }}
+				{
+					"name": "Server",
+					"value": "{{ .ServerName }}",
+					"inline": false
+				},
 				{
 					"name": "Event",
 					"value": "{{ .Event }}",
@@ -29,12 +40,6 @@ var DefaultTemplate = `{
 					"value": "{{ .Status }}",
 					"inline": true
 				},
-				{{ if .PlayerInfo }}
-				{
-					"name": "PlayerInfo",
-					"value": "{{ .PlayerInfo.Name }} - {{ .PlayerInfo.Uuid }}"
-				},
-				{{ end }}
 				{
 					"name": "Backend",
 					"value": "{{ .BackendHostPort }}"
@@ -70,6 +75,18 @@ func BuildMessage(cfgTmpl string, data server.WebhookNotifierPayload) (*discordg
 	}
 
 	return &params, nil
+}
+
+func TemplateWebhookUrl(urlTmpl string, data server.WebhookNotifierPayload) (string, error) {
+	tmpl, err := template.New("webhook-url").Parse(urlTmpl)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse template: %w", err)
+	}
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		return "", fmt.Errorf("failed to execute template: %w", err)
+	}
+	return buf.String(), nil
 }
 
 func SendWebhookMessage(url string, message *discordgo.WebhookParams) error {

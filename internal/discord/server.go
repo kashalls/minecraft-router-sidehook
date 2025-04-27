@@ -21,7 +21,7 @@ func InitServer(config DiscordConfig) *chi.Mux {
 
 		log.Debug("Received webhook payload", zap.Any("payload", payload))
 
-		params, err := BuildMessage(config.WebhookTemplate, payload)
+		params, err := BuildMessage(config.DiscordTemplate, payload)
 		if err != nil {
 			log.Error("Failed to build webhook message", zap.Error(err))
 			http.Error(w, "Failed to build webhook message", http.StatusInternalServerError)
@@ -30,7 +30,18 @@ func InitServer(config DiscordConfig) *chi.Mux {
 
 		log.Debug("Sending webhook message", zap.Any("params", params))
 
-		if err := SendWebhookMessage(config.Webhook, params); err != nil {
+		webhookURL := config.WebhookURL
+		if config.WebhookURLIsTemplate {
+			var err error
+			webhookURL, err = TemplateWebhookUrl(config.WebhookURL, payload)
+			if err != nil {
+				log.Error("Failed to template webhook URL", zap.Error(err))
+				http.Error(w, "Failed to template webhook URL", http.StatusInternalServerError)
+				return
+			}
+		}
+
+		if err := SendWebhookMessage(webhookURL, params); err != nil {
 			log.Error("Failed to send webhook message", zap.Error(err))
 			http.Error(w, "Failed to send webhook message", http.StatusInternalServerError)
 			return
