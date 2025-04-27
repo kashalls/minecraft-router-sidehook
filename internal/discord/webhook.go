@@ -38,8 +38,8 @@ var DefaultTemplate = `{
 				{
 					"name": "Backend",
 					"value": "{{ .BackendHostPort }}"
-				},
-				{{ if .Error }}
+				}
+				{{ if .Error }},
 				{
 					"name": "Error",
 					"value": "{{ .Error }}"
