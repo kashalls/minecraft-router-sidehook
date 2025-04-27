@@ -41,6 +41,12 @@ func InitServer(config DiscordConfig) *chi.Mux {
 			}
 		}
 
+		if webhookURL == "" {
+			log.Error("No webhook URL provided")
+			http.Error(w, "No webhook URL provided", http.StatusInternalServerError)
+			return
+		}
+
 		if err := SendWebhookMessage(webhookURL, params); err != nil {
 			log.Error("Failed to send webhook message", zap.Error(err))
 			http.Error(w, "Failed to send webhook message", http.StatusInternalServerError)
