@@ -17,7 +17,7 @@ var DefaultTemplate = `{
 			"author": {
 				"name": "{{.Client.Host}}"
 			},
-			"color": 16720497
+			"color": 16720497,
 			"fields": [
 				{
 					"name": "Event",
@@ -45,7 +45,7 @@ var DefaultTemplate = `{
 					"value": "{{ .Error }}"
 				}
 				{{ end }}
-			],
+			]
 		}
 	]
 }`
