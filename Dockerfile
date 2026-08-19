@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine AS builder
+FROM golang:1.27-alpine AS builder
 ARG PKG=github.com/kashalls/minecraft-router-sidehook
 ARG VERSION=dev
 ARG REVISION=dev
