@@ -3,10 +3,11 @@ module github.com/kashalls/minecraft-router-sidehook
 go 1.24.2
 
 require (
-	github.com/bwmarrin/discordgo v0.28.1
+	github.com/bwmarrin/discordgo v0.29.0
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/google/uuid v1.6.0
+	github.com/itzg/mc-router v0.0.0-20250426171632-4ba55a9ccdc1
 	github.com/prometheus/client_golang v1.22.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/net v0.39.0
@@ -40,7 +41,6 @@ require (
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/inconshreveable/log15 v3.0.0-testing.5+incompatible // indirect
 	github.com/inconshreveable/log15/v3 v3.0.0-testing.5 // indirect
-	github.com/itzg/mc-router v0.0.0-20250426171632-4ba55a9ccdc1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
